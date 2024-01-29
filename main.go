@@ -5,6 +5,7 @@ import (
 
 	"github.com/Imamsubekti26/Perpustakaan_Go/utils"
 	xlogger "github.com/Imamsubekti26/Perpustakaan_Go/utils/XLogger"
+	"github.com/Imamsubekti26/Perpustakaan_Go/utils/database"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -13,7 +14,7 @@ func main() {
 
 	app := fiber.New()
 
-	_, err := utils.InitDB()
+	_, err := database.Connection()
 	if err != nil {
 		xlogger.WriteAndShow(err)
 	}
