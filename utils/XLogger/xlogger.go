@@ -3,7 +3,6 @@ package xlogger
 import (
 	"fmt"
 	"log"
-	"os"
 	"time"
 )
 
@@ -52,15 +51,11 @@ func Write(err error) {
 
 	today := time.Now().Format("2006-01-02")
 	filePath := fmt.Sprintf("logs/%s.log", today)
-	file, err := os.OpenFile(filePath, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-	fileLogger := log.New(file, "", log.Ldate|log.Ltime)
-	fileLogger.Printf(xlog.message)
+	WriteToFile(filePath, xlog.message)
 
 	if xlog.isFatal {
+		filePath = fmt.Sprintf("logs/%s-error.log", today)
+		WriteToFile(filePath, xlog.message)
 		panic(xlog.message)
 	}
 }
