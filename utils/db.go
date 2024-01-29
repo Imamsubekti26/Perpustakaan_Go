@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	xlogger "github.com/Imamsubekti26/Perpustakaan_Go/utils/XLogger"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -23,7 +24,7 @@ func InitDB() (*dbInstance, error) {
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		return nil, fmt.Errorf("database connection error: %s", err)
+		return nil, xlogger.Error(err)
 	}
 
 	var dbInstance dbInstance
