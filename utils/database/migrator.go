@@ -8,7 +8,7 @@ import (
 	xlogger "github.com/Imamsubekti26/Perpustakaan_Go/utils/XLogger"
 )
 
-func (db *dbInstance) Migrate() {
+func (db *dbInstance) Migrate() error {
 	migrator := db.Connection.Migrator()
 
 	isMigrate := flag.Bool("migrate", false, "Run Gorm migration")
@@ -29,15 +29,16 @@ func (db *dbInstance) Migrate() {
 		for _, model := range modelList {
 			if *isForce {
 				if err := migrator.DropTable(model); err != nil {
-					xlogger.WriteAndShow(xlogger.Errorf("Failed to drop table %T: %s", model, err))
+					return xlogger.Errorf("Failed to drop table %T: %s", model, err)
 				}
 			}
 		}
 
 		if err := db.Connection.AutoMigrate(modelList...); err != nil {
-			xlogger.WriteAndShow(xlogger.Errorf("Failed to migrate : %s", err))
+			return xlogger.Errorf("Failed to migrate : %s", err)
 		}
 
 		fmt.Println("Database migration completed.")
 	}
+	return nil
 }
