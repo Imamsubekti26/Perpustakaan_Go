@@ -4,6 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"log"
+
+	"github.com/Imamsubekti26/Perpustakaan_Go/models"
 )
 
 func (db *dbInstance) Migrate() {
@@ -17,7 +19,11 @@ func (db *dbInstance) Migrate() {
 	if *isMigrate || *isForce {
 
 		modelList := []interface{}{
-			// &models.Users{},
+			&models.Users{},
+			&models.Presences{},
+			&models.Borrows{},
+			&models.Books{},
+			&models.Categories{},
 		}
 
 		for _, model := range modelList {

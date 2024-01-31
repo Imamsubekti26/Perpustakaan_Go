@@ -14,10 +14,12 @@ func main() {
 
 	app := fiber.New()
 
-	_, err := database.Connection()
+	db, err := database.Connection()
 	if err != nil {
 		xlogger.WriteAndShow(err)
 	}
+
+	db.Migrate()
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World!")
