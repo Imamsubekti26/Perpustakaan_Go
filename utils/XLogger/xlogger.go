@@ -30,6 +30,20 @@ func Error(args ...interface{}) *Log {
 	}
 }
 
+func Infof(args ...interface{}) *Log {
+	return &Log{
+		isFatal: false,
+		message: fmt.Sprintf(args[0].(string), args[1:]...),
+	}
+}
+
+func Errorf(args ...interface{}) *Log {
+	return &Log{
+		isFatal: true,
+		message: fmt.Sprintf(args[0].(string), args[1:]...),
+	}
+}
+
 func Show(err error) {
 	xlog, ok := err.(*Log)
 	if !ok {

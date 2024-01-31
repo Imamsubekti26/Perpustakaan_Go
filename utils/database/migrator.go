@@ -3,9 +3,9 @@ package database
 import (
 	"flag"
 	"fmt"
-	"log"
 
 	"github.com/Imamsubekti26/Perpustakaan_Go/models"
+	xlogger "github.com/Imamsubekti26/Perpustakaan_Go/utils/XLogger"
 )
 
 func (db *dbInstance) Migrate() {
@@ -21,21 +21,21 @@ func (db *dbInstance) Migrate() {
 		modelList := []interface{}{
 			&models.Users{},
 			&models.Presences{},
-			&models.Borrows{},
 			&models.Books{},
 			&models.Categories{},
+			&models.Borrows{},
 		}
 
 		for _, model := range modelList {
 			if *isForce {
 				if err := migrator.DropTable(model); err != nil {
-					log.Fatalf("Failed to drop table %T: %s", model, err)
+					xlogger.WriteAndShow(xlogger.Errorf("Failed to drop table %T: %s", model, err))
 				}
 			}
+		}
 
-			if err := migrator.CreateTable(model); err != nil {
-				log.Fatalf("Failed to migrate table %T: %s", model, err)
-			}
+		if err := db.Connection.AutoMigrate(modelList...); err != nil {
+			xlogger.WriteAndShow(xlogger.Errorf("Failed to migrate : %s", err))
 		}
 
 		fmt.Println("Database migration completed.")
