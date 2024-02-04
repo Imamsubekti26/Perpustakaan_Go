@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/Imamsubekti26/Perpustakaan_Go/controllers"
 	xlogger "github.com/Imamsubekti26/Perpustakaan_Go/utils/XLogger"
 	"github.com/Imamsubekti26/Perpustakaan_Go/utils/database"
 	"github.com/gofiber/fiber/v2"
@@ -32,10 +33,17 @@ func main() {
 	// create fiber instance
 	app := fiber.New()
 
+	// konfigurasi fiber
+	app.Static("/assets", "./public/assets")
+
 	// routes
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World!")
 	})
+
+	userController := controllers.NewUserController(db.Connection)
+	app.Post("/register", userController.Register)
+	app.Post("/login", userController.Login)
 
 	// running fiber server
 	srv := fmt.Sprintf("%s:%s",
